@@ -1,28 +1,31 @@
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { EntityRepository, Repository } from 'typeorm';
+import { DataSource, EntityRepository, Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
 import { CustomRepository } from 'src/typeorm-ex.decorator';
+import { Injectable } from '@nestjs/common/decorators';
 
-@CustomRepository(Usuario)
-export class UsuarioRepository extends Repository<Usuario>{
+@Injectable()
+export class UsuarioRepository{
 
-    findAll() {
-        return this.createQueryBuilder('Usuario').getMany();
+    constructor(private dataSource: DataSource) { }
+
+     findAll() {
+        return this.dataSource.getRepository(Usuario).createQueryBuilder('Usuario').getMany();
     }
 
     findById(id) {
-        return this.findOne(id);
+        return this.dataSource.getRepository(Usuario).findOneBy(id);
     }
 
     createUsuario( createUsuarioDto: CreateUsuarioDto){
         const {nome, email, senha} = createUsuarioDto
-        let usuario = this.create({
+        let usuario = this.dataSource.getRepository(Usuario).create({
             nome,
             email,
             senha
-        })
-        return this.save(usuario)
+        }) 
+        return this.dataSource.getRepository(Usuario).save(usuario)
     }
 
     async updateUsuario(id: number, updateUsuarioDto: UpdateUsuarioDto) {
@@ -31,10 +34,10 @@ export class UsuarioRepository extends Repository<Usuario>{
         usuario.email = email
         usuario.nome = nome
         usuario.senha = senha
-        return this.save(usuario);
+        return this.dataSource.getRepository(Usuario).save(usuario);
     }
 
     removeUsuario(id: number) {
-        return this.delete(id)
-    } 
+        return this.dataSource.getRepository(Usuario).delete(id)
+    }  
 }
