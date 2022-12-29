@@ -11,11 +11,11 @@ export class EmprestimoRepository{
     constructor(private dataSource: DataSource) { }
 
      findAll() {
-        return this.dataSource.getRepository(Emprestimo).createQueryBuilder('Usuario').getMany();
+        return this.dataSource.getRepository(Emprestimo).createQueryBuilder('emprestimo').getMany();
     }
 
-    findById(id) {
-        return this.dataSource.getRepository(Emprestimo).findOneBy(id);
+    findById(id:number) {
+        return this.dataSource.getRepository(Emprestimo).findOneBy({id:id});
     }
 
     async createEmprestimo( createEmprestimoDto: CreateEmprestimoDto){

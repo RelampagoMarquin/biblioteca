@@ -1,6 +1,6 @@
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-
+import { Livro } from "src/livros/entities/livro.entity";
 @Entity()
 export class Emprestimo {
 
@@ -19,7 +19,6 @@ export class Emprestimo {
     @ManyToOne((type) => Usuario, (usuario) => usuario.emprestimos)
     usuario: Usuario
 
-    //falta a entidade
-    /* @ManyToOne((type) => Livro, (livro) => livro.emprestimos)
-    livro: Livro */
+    @ManyToOne((type) => Livro, (livro) => livro.emprestimos)
+    livro: Livro
 }

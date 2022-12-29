@@ -14,8 +14,8 @@ export class UsuarioRepository{
         return this.dataSource.getRepository(Usuario).createQueryBuilder('Usuario').getMany();
     }
 
-    findById(id) {
-        return this.dataSource.getRepository(Usuario).findOneBy(id);
+    findById(id:number) {
+        return this.dataSource.getRepository(Usuario).findOneBy({id:id});
     }
 
     createUsuario( createUsuarioDto: CreateUsuarioDto){

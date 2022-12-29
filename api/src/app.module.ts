@@ -9,6 +9,8 @@ import { UsuarioRepository } from './usuario/usuario.repository';
 import { DataSource } from 'typeorm';
 import { EmprestimoModule } from './emprestimo/emprestimo.module';
 import { Emprestimo } from './emprestimo/entities/emprestimo.entity';
+import { LivrosModule } from './livros/livros.module';
+import { AutorModule } from './autor/autor.module';
 
 @Module({
   imports: [ TypeOrmModule.forRoot({
@@ -16,15 +18,17 @@ import { Emprestimo } from './emprestimo/entities/emprestimo.entity';
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: 't3l3c0m',
+    password: 'Amanda@2022',
     database: 'biblioteca',
-    entities: [Usuario, Emprestimo],
+    // entities: [Usuario, Emprestimo],
     autoLoadEntities: true,
     synchronize: true,
   }),
   TypeOrmExModule.forCustomRepository([UsuarioRepository]),
     UsuarioModule,
-    EmprestimoModule],
+    EmprestimoModule,
+    LivrosModule,
+    AutorModule],
   controllers: [AppController],
   providers: [AppService],
 })
