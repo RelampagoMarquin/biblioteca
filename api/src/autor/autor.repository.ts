@@ -1,28 +1,31 @@
 import { CreateAutorDto } from './dto/create-autor.dto';
 import { UpdateAutorDto } from './dto/update-autor.dto';
 import { Autor } from './entities/autor.entity';
-import { DataSource, EntityRepository, Repository } from 'typeorm';
-import { CustomRepository } from 'src/typeorm-ex.decorator';
+import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common/decorators';
 
 @Injectable()
 export class AutorRepository{
-    constructor(private dataSource: DataSource) { }
+    repo: Repository<Autor>;
+
+    constructor(private dataSource: DataSource) {
+        this.repo = this.dataSource.getRepository(Autor)
+    }
 
     findAll() {
-        return this.dataSource.getRepository(Autor).createQueryBuilder('Autor').getMany();
+        return this.repo.createQueryBuilder('Autor').getMany();
     }
 
     findById(id:number) {
-        return this.dataSource.getRepository(Autor).findOneBy({id:id});
+        return this.repo.findOneBy({id:id});
     }
 
     createAutor( createAutorDto: CreateAutorDto){
         const {nome} = createAutorDto
-        let autor = this.dataSource.getRepository(Autor).create({
+        let autor = this.repo.create({
             nome
         }) 
-        return this.dataSource.getRepository(Autor).save(autor)
+        return this.repo.save(autor)
     }
 
     async updateAutor(id: number, updateAutorDto: UpdateAutorDto) {
@@ -31,10 +34,10 @@ export class AutorRepository{
 
         autor.nome = nome
 
-        return this.dataSource.getRepository(Autor).save(autor);
+        return this.repo.save(autor);
     }
 
     removeAutor(id: number) {
-        return this.dataSource.getRepository(Autor).delete(id)
+        return this.repo.delete(id)
     }  
 }

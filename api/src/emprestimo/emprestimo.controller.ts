@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
 import { EmprestimoService } from './emprestimo.service';
+import { AuthGuard } from '@nestjs/passport'
 import { CreateEmprestimoDto } from './dto/create-emprestimo.dto';
 import { UpdateEmprestimoDto } from './dto/update-emprestimo.dto';
 
 @Controller('emprestimo')
+@UseGuards(AuthGuard('jwt'))
 export class EmprestimoController {
   constructor(private readonly emprestimoService: EmprestimoService) {}
 

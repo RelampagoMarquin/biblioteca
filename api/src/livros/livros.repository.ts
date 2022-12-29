@@ -1,31 +1,35 @@
 import {CreateLivroDto} from './dto/create-livro.dto';
 import { UpdateLivroDto } from './dto/update-livro.dto';
-import { DataSource, EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {Livro} from './entities/livro.entity';
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class LivrosRepository {
-    constructor(private dataSource: DataSource) { }
+    repo: Repository<Livro>;
+
+    constructor(private dataSource: DataSource) {
+        this.repo = this.dataSource.getRepository(Livro)
+    }
 
     findAll() {
-       return this.dataSource.getRepository(Livro).createQueryBuilder('Livro').getMany();
+       return this.repo.createQueryBuilder('Livro').getMany();
    }
 
-   findById(id) {
-       return this.dataSource.getRepository(Livro).findOneBy(id);
+   findById(id: number) {
+       return this.repo.findOneBy({id: id});
    }
 
    createLivro( createLivroDto: CreateLivroDto){
        const {nome, genero, quantidade, edicao, ano} = createLivroDto
-       let livro = this.dataSource.getRepository(Livro).create({
+       let livro = this.repo.create({
            nome,
            genero,
            quantidade,
            edicao,
            ano
        }) 
-       return this.dataSource.getRepository(Livro).save(livro)
+       return this.repo.save(livro)
    }
 
    async updateLivro(id: number, updateLivroDto: UpdateLivroDto) {
@@ -36,10 +40,10 @@ export class LivrosRepository {
        livro.quantidade = quantidade
        livro.edicao = edicao
        livro.ano = ano
-       return this.dataSource.getRepository(Livro).save(livro);
+       return this.repo.save(livro);
    }
 
    removeLivro(id: number) {
-       return this.dataSource.getRepository(Livro).delete(id)
+       return this.repo.delete(id)
    }  
 }

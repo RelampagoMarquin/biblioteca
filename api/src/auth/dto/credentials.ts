@@ -1,10 +1,7 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength, Matches } from "class-validator"
+import { IsString, Matches, MaxLength, MinLength } from "class-validator"
 
-export class CreateUsuarioDto {
-    @IsString()
-    @IsNotEmpty()
-    nome: string
-
+export class Credentials {
+    
     @IsString()
     @MinLength(10)
     @MaxLength(120)

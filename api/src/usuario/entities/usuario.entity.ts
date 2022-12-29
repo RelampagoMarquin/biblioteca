@@ -1,5 +1,5 @@
 import { Emprestimo } from "src/emprestimo/entities/emprestimo.entity"
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm"
 
 @Entity()
 export class Usuario {
@@ -10,7 +10,7 @@ export class Usuario {
     @Column()
     nome: string
 
-    @Column()
+    @Column({unique: true})
     email: string
 
     @Column()

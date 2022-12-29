@@ -1,4 +1,4 @@
-import { DataSource} from 'typeorm';
+import { DataSource, Repository} from 'typeorm';
 import { Injectable } from '@nestjs/common/decorators';
 import { Emprestimo } from './entities/emprestimo.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
@@ -7,15 +7,17 @@ import { UpdateEmprestimoDto } from './dto/update-emprestimo.dto';
 
 @Injectable()
 export class EmprestimoRepository{
-
-    constructor(private dataSource: DataSource) { }
+    repo: Repository<Emprestimo>;
+    constructor(private dataSource: DataSource) {
+        this.repo = this.dataSource.getRepository(Emprestimo)
+     }
 
      findAll() {
-        return this.dataSource.getRepository(Emprestimo).createQueryBuilder('emprestimo').getMany();
+        return this.repo.createQueryBuilder('emprestimo').getMany();
     }
 
     findById(id:number) {
-        return this.dataSource.getRepository(Emprestimo).findOneBy({id:id});
+        return this.repo.findOneBy({id:id});
     }
 
     async createEmprestimo( createEmprestimoDto: CreateEmprestimoDto){
@@ -23,21 +25,21 @@ export class EmprestimoRepository{
             .findOneBy({id: createEmprestimoDto.usuarioId})
         
         const validade = 7
-        let emprestimo = this.dataSource.getRepository(Emprestimo).create({
+        let emprestimo = this.repo.create({
             validade,
             usuario
         }) 
-        return this.dataSource.getRepository(Emprestimo).save(emprestimo)
+        return this.repo.save(emprestimo)
     }
 
     async updateEmprestimo(id: number, updateEmprestimoDto: UpdateEmprestimoDto) {
         const retorno = new Date
         const emprestimo = await this.findById(id)
             emprestimo.retorno = retorno
-        return this.dataSource.getRepository(Emprestimo).save(emprestimo);
+        return this.repo.save(emprestimo);
     }
 
     removeEmprestimo(id: number) {
-        return this.dataSource.getRepository(Emprestimo).delete(id)
+        return this.repo.delete(id)
     }  
 }

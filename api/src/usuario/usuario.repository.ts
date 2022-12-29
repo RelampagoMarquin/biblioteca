@@ -1,43 +1,65 @@
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { DataSource, EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
-import { CustomRepository } from 'src/typeorm-ex.decorator';
 import { Injectable } from '@nestjs/common/decorators';
+import { ConflictException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioRepository{
+    repo: Repository<Usuario>;
 
-    constructor(private dataSource: DataSource) { }
-
-     findAll() {
-        return this.dataSource.getRepository(Usuario).createQueryBuilder('Usuario').getMany();
+    constructor(private dataSource: DataSource) {
+        this.repo = this.dataSource.getRepository(Usuario)
     }
 
-    findById(id:number) {
-        return this.dataSource.getRepository(Usuario).findOneBy({id:id});
+    findAll() {
+        return this.repo.createQueryBuilder('Usuario').getMany();
     }
 
-    createUsuario( createUsuarioDto: CreateUsuarioDto){
+    findById(id: number ) {
+        return this.repo.findOneBy({id: id});
+    }
+
+    findByEmail(email: string ) {
+        return this.repo.findOneBy({email: email});
+    }
+
+    async createUsuario( createUsuarioDto: CreateUsuarioDto){
         const {nome, email, senha} = createUsuarioDto
+        const salt = await bcrypt.genSalt()
+        const hashpass = await bcrypt.hash(senha, salt)
         let usuario = this.dataSource.getRepository(Usuario).create({
             nome,
             email,
-            senha
+            senha: hashpass
         }) 
-        return this.dataSource.getRepository(Usuario).save(usuario)
+        try {
+             await this.repo.save(usuario)
+             return 'success'
+        } catch (error) {
+            if(error.code == 'ER_DUP_ENTRY'){
+                throw new ConflictException('Usuario já cadastrado')
+            }
+        }
+        
     }
 
     async updateUsuario(id: number, updateUsuarioDto: UpdateUsuarioDto) {
         const {nome, email, senha} = updateUsuarioDto
         const usuario = await this.findById(id)
+        const salt = await bcrypt.genSalt()
+        const hashpass = await bcrypt.hash(senha, salt)
         usuario.email = email
         usuario.nome = nome
-        usuario.senha = senha
-        return this.dataSource.getRepository(Usuario).save(usuario);
+        usuario.senha = hashpass
+        return this.repo.save(usuario);
     }
 
     removeUsuario(id: number) {
-        return this.dataSource.getRepository(Usuario).delete(id)
-    }  
+        return this.repo.delete(id)
+    }
+    
+    
 }
