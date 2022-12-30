@@ -4,6 +4,7 @@ import { Emprestimo } from './entities/emprestimo.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { CreateEmprestimoDto } from './dto/create-emprestimo.dto';
 import { UpdateEmprestimoDto } from './dto/update-emprestimo.dto';
+import { Livro } from 'src/livros/entities/livro.entity';
 
 @Injectable()
 export class EmprestimoRepository{
@@ -21,21 +22,23 @@ export class EmprestimoRepository{
     }
 
     async createEmprestimo( createEmprestimoDto: CreateEmprestimoDto){
-        const usuario = await this.dataSource.getRepository(Usuario)
-            .findOneBy({id: createEmprestimoDto.usuarioId})
-        
         const validade = 7
         let emprestimo = this.repo.create({
             validade,
-            usuario
-        }) 
+            usuario: createEmprestimoDto.usuario,
+            livro: createEmprestimoDto.livro
+        })
+        
         return this.repo.save(emprestimo)
     }
 
-    async updateEmprestimo(id: number, updateEmprestimoDto: UpdateEmprestimoDto) {
+    async updateEmprestimo(id: number) {
         const retorno = new Date
-        const emprestimo = await this.findById(id)
-            emprestimo.retorno = retorno
+        //const {usuario, livro} = updateEmprestimoDto
+        const emprestimo = await this.repo.findOneBy({
+            id: id
+        }) 
+        emprestimo.retorno = retorno
         return this.repo.save(emprestimo);
     }
 

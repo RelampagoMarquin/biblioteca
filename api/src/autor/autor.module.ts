@@ -8,6 +8,7 @@ import { Autor } from './entities/autor.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Autor])],
   controllers: [AutorController],
-  providers: [AutorService, AutorRepository]
+  providers: [AutorService, AutorRepository],
+  exports: [AutorRepository]
 })
 export class AutorModule {}

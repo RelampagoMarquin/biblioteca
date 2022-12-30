@@ -1,4 +1,5 @@
 import { IsNumber, IsString, IsNotEmpty } from "class-validator"
+import { Autor } from "src/autor/entities/autor.entity"
 
 export class CreateLivroDto {
     @IsString()
@@ -10,7 +11,6 @@ export class CreateLivroDto {
     genero: string
     
     @IsNumber()
-    
     quantidade: number
     
     @IsNotEmpty()
@@ -18,4 +18,10 @@ export class CreateLivroDto {
     
     @IsNumber()
     ano: number
+
+    autorId?: number
+
+    autor?: Autor
+
+
 }

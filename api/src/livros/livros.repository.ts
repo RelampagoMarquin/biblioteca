@@ -21,13 +21,14 @@ export class LivrosRepository {
    }
 
    createLivro( createLivroDto: CreateLivroDto){
-       const {nome, genero, quantidade, edicao, ano} = createLivroDto
+       const {nome, genero, quantidade, edicao, ano, autor} = createLivroDto
        let livro = this.repo.create({
            nome,
            genero,
            quantidade,
            edicao,
-           ano
+           ano,
+           autor
        }) 
        return this.repo.save(livro)
    }
@@ -43,7 +44,19 @@ export class LivrosRepository {
        return this.repo.save(livro);
    }
 
+   async updateLivroSaida(livro: Livro) {
+       livro.quantidade --
+       return this.repo.save(livro);
+   }
+
+   async updateLivroRetorno(livro: Livro) {
+    livro.quantidade ++
+    return this.repo.save(livro);
+}
+
    removeLivro(id: number) {
        return this.repo.delete(id)
-   }  
+   }
+   
+   
 }

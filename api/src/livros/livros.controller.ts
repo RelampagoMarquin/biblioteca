@@ -7,8 +7,9 @@ import { UpdateLivroDto } from './dto/update-livro.dto';
 export class LivrosController {
   constructor(private readonly livrosService: LivrosService) {}
 
-  @Post()
-  create(@Body() createLivroDto: CreateLivroDto) {
+  @Post('/autor/:id')
+  create(@Param('id') id: number, @Body() createLivroDto: CreateLivroDto) {
+    createLivroDto.autorId = id
     return this.livrosService.create(createLivroDto);
   }
 
@@ -18,17 +19,17 @@ export class LivrosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.livrosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLivroDto: UpdateLivroDto) {
+  update(@Param('id') id: number, @Body() updateLivroDto: UpdateLivroDto) {
     return this.livrosService.update(+id, updateLivroDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.livrosService.remove(+id);
   }
 }

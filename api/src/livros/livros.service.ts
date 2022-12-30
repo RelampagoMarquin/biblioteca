@@ -1,20 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common/exceptions';
+import { AutorRepository } from 'src/autor/autor.repository';
 import { CreateLivroDto } from './dto/create-livro.dto';
 import { UpdateLivroDto } from './dto/update-livro.dto';
 import { Livro } from './entities/livro.entity';
 import { LivrosRepository } from './livros.repository';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class LivrosService {
   constructor(
     @Inject(LivrosRepository)
-      private readonly livrosRepository: LivrosRepository,
-  ) {}
+    private readonly livrosRepository: LivrosRepository,
+    @Inject(AutorRepository)
+    private readonly autorRepository: AutorRepository,
+  ) { }
 
-  create(createLivroDto: CreateLivroDto) {  
+  async create(createLivroDto: CreateLivroDto) {
+    createLivroDto.autor = await this.autorRepository.findById(createLivroDto.autorId)
+    if(!createLivroDto.autor){
+      throw new BadRequestException('Autor não existe')
+    }
     return this.livrosRepository.createLivro(createLivroDto);
   }
 

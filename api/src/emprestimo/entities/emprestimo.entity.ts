@@ -19,6 +19,6 @@ export class Emprestimo {
     @ManyToOne((type) => Usuario, (usuario) => usuario.emprestimos)
     usuario: Usuario
 
-    @ManyToOne((type) => Livro, (livro) => livro.emprestimos)
+    @ManyToOne((type) => Livro, (livro) => livro.emprestimos, {eager: true})
     livro: Livro
 }

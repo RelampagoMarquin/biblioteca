@@ -1,13 +1,14 @@
 import { IsNumber, IsNotEmpty } from "class-validator"
+import { Livro } from "src/livros/entities/livro.entity"
+import { Usuario } from "src/usuario/entities/usuario.entity"
 
 export class CreateEmprestimoDto {
-    @IsNumber()
     @IsNotEmpty()
-    usuarioId: number
+    usuario: Usuario
 
     @IsNumber()
     @IsNotEmpty()
     livroId: number
 
-    
+    livro?: Livro
 }
