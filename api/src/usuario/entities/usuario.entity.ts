@@ -13,7 +13,7 @@ export class Usuario {
     @Column({unique: true})
     email: string
 
-    @Column()
+    @Column({ select: false })
     senha: string
 
     @OneToMany((type) => Emprestimo, (emprestimo) => emprestimo.usuario)

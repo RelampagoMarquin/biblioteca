@@ -15,7 +15,7 @@ import { AuthModule } from './auth/auth.module';
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: 'cirila',
+    password: 'Amanda@2022',
     database: 'biblioteca',
     autoLoadEntities: true,
     synchronize: true,

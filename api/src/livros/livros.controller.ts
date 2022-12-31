@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,UseGuards } from '@nestjs/common';
 import { LivrosService } from './livros.service';
 import { CreateLivroDto } from './dto/create-livro.dto';
 import { UpdateLivroDto } from './dto/update-livro.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('livros')
+@UseGuards(AuthGuard('jwt'))
 export class LivrosController {
   constructor(private readonly livrosService: LivrosService) {}
 

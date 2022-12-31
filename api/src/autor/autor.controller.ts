@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AutorService } from './autor.service';
 import { CreateAutorDto } from './dto/create-autor.dto';
 import { UpdateAutorDto } from './dto/update-autor.dto';
 
 @Controller('autor')
+@UseGuards(AuthGuard('jwt'))
 export class AutorController {
   constructor(private readonly autorService: AutorService) {}
 

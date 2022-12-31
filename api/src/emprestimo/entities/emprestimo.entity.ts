@@ -21,4 +21,4 @@ export class Emprestimo {
 
     @ManyToOne((type) => Livro, (livro) => livro.emprestimos, {eager: true})
     livro: Livro
-}
+} 

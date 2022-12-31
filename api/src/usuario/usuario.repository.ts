@@ -5,6 +5,7 @@ import { Usuario } from './entities/usuario.entity';
 import { Injectable } from '@nestjs/common/decorators';
 import { ConflictException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Emprestimo } from 'src/emprestimo/entities/emprestimo.entity';
 
 @Injectable()
 export class UsuarioRepository{

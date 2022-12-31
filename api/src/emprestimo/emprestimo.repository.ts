@@ -1,4 +1,4 @@
-import { DataSource, Repository} from 'typeorm';
+import { DataSource, IsNull, Repository} from 'typeorm';
 import { Injectable } from '@nestjs/common/decorators';
 import { Emprestimo } from './entities/emprestimo.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
@@ -32,17 +32,18 @@ export class EmprestimoRepository{
         return this.repo.save(emprestimo)
     }
 
-    async updateEmprestimo(id: number) {
+    async updateEmprestimo(emprestimo: Emprestimo) {
         const retorno = new Date
-        //const {usuario, livro} = updateEmprestimoDto
-        const emprestimo = await this.repo.findOneBy({
-            id: id
-        }) 
         emprestimo.retorno = retorno
         return this.repo.save(emprestimo);
-    }
+    } 
 
     removeEmprestimo(id: number) {
         return this.repo.delete(id)
     }  
+
+    findByUser(usuario: Usuario){
+        return this.repo.countBy({usuario, retorno:IsNull()})
+    }
+    
 }
