@@ -10,8 +10,8 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 export class EmprestimoController {
   constructor(private readonly emprestimoService: EmprestimoService) {}
 
-  @Post('livro/:id')
-  create(@Param('id') id, @GetUser() usuario: Usuario) {
+  @Post('livro/:livroid')
+  create(@Param('livroid') id, @GetUser() usuario: Usuario) {
     const createEmprestimoDto = new CreateEmprestimoDto()
     createEmprestimoDto.livroId = id
     createEmprestimoDto.usuario = usuario

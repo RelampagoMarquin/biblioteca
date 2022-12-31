@@ -24,7 +24,6 @@ export class EmprestimoService {
         throw new BadRequestException('Livro não cadastrado.')
     }
     const emprestimo = await this.emprestimoRepository.findByUser(createEmprestimoDto.usuario)
-    console.log(emprestimo)
     if(emprestimo > 0){
       throw new BadRequestException('Usuário possui retornos pendentes.')
     } 

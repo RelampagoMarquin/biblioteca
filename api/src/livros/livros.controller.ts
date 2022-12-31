@@ -9,8 +9,8 @@ import { AuthGuard } from '@nestjs/passport';
 export class LivrosController {
   constructor(private readonly livrosService: LivrosService) {}
 
-  @Post('/autor/:id')
-  create(@Param('id') id: number, @Body() createLivroDto: CreateLivroDto) {
+  @Post('/autor/:autorid')
+  create(@Param('autorid') id: number, @Body() createLivroDto: CreateLivroDto) {
     createLivroDto.autorId = id
     return this.livrosService.create(createLivroDto);
   }
