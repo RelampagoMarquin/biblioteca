@@ -39,4 +39,9 @@ export class LivrosService {
   remove(id: number) {
     return this.livrosRepository.removeLivro;
   }
+
+  async livroName(id: number){
+    const livro = await this.livrosRepository.findById(id)
+    return livro.nome
+  }
 }
