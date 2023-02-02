@@ -4,6 +4,7 @@ import { EmprestimoRepository } from './emprestimo.repository';
 import { Inject } from '@nestjs/common/decorators';
 import { LivrosRepository } from 'src/livros/livros.repository';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { RedisClientType } from 'redis';
 
 @Injectable()
 export class EmprestimoService {
@@ -12,6 +13,7 @@ export class EmprestimoService {
       private readonly emprestimoRepository: EmprestimoRepository,
       @Inject(LivrosRepository)
       private readonly livrosRepository: LivrosRepository,
+      @Inject('CACHE_MANAGER') private redisClient : RedisClientType
   ) {}
 
   async create(createEmprestimoDto: CreateEmprestimoDto) {
@@ -29,6 +31,8 @@ export class EmprestimoService {
     } 
     createEmprestimoDto.livro = livro
     this.livrosRepository.updateLivroSaida(createEmprestimoDto.livro)
+    const mensagem = "O livro: " + livro.nome + " Foi atualizado. Quantidade disponivel: " + livro.quantidade
+    this.redisClient.publish(livro.nome, mensagem);
     return this.emprestimoRepository.createEmprestimo(createEmprestimoDto);
     
   }
@@ -43,6 +47,7 @@ export class EmprestimoService {
 
   async updateReturn(id: number) {
     const empretimo = await this.emprestimoRepository.findById(id)
+    const livro = empretimo.livro
     console.log(empretimo)
     if(empretimo.retorno){
       throw new BadRequestException('Este livro já foi devolvido.');
@@ -50,6 +55,8 @@ export class EmprestimoService {
     } 
     this.emprestimoRepository.updateEmprestimo(empretimo) 
     this.livrosRepository.updateLivroRetorno(empretimo.livro)
+    const mensagem = "O livro: " + livro.nome + " Foi atualizado. Quantidade disponivel: " + livro.quantidade
+    this.redisClient.publish(livro.nome, mensagem);
     return empretimo
   }
 
