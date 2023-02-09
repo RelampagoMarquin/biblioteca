@@ -48,7 +48,6 @@ export class EmprestimoService {
   async updateReturn(id: number) {
     const empretimo = await this.emprestimoRepository.findById(id)
     const livro = empretimo.livro
-    console.log(empretimo)
     if(empretimo.retorno){
       throw new BadRequestException('Este livro já foi devolvido.');
      

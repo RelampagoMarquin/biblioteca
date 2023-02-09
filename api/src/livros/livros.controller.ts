@@ -12,31 +12,35 @@ interface MessageEvent {
 
 
 @Controller('livros')
-@UseGuards(AuthGuard('jwt'))
 export class LivrosController {
   constructor(private readonly livrosService: LivrosService, @Inject('CACHE_MANAGER') private redisClient : RedisClientType) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/autor/:autorid')
   create(@Param('autorid') id: number, @Body() createLivroDto: CreateLivroDto) {
     createLivroDto.autorId = id
     return this.livrosService.create(createLivroDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll() {
     return this.livrosService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.livrosService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateLivroDto: UpdateLivroDto) {
     return this.livrosService.update(+id, updateLivroDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.livrosService.remove(+id);
@@ -52,8 +56,15 @@ export class LivrosController {
 
         try {
           client = await this.redisClient.duplicate();
-          client.then.connect().then(() => {
-            this.redisClient.subscribe(channelName, (message, channel) => {
+          console.log("Redis client created");
+          client.connect((err) => {
+            if (err) {
+              console.log(err);
+              return;
+            }})
+          client.then.connect().then(()  => {
+            console.log("Redis client ready");
+            this.redisClient.subscribe('teste', (message, channel) => {
               console.log(message)
               subscriber.next({data: message})
             })
