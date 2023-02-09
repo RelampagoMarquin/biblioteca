@@ -16,7 +16,7 @@ import { CacheRedis } from './CacheManage';
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: 'Amanda@2022',
+    password: 'ZICO509',
     database: 'biblioteca',
     autoLoadEntities: true,
     synchronize: true,

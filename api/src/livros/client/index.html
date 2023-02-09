@@ -1,0 +1,10 @@
+<script type="text/javascript">
+    const eventSource = new EventSource('/livros/watch:id')
+
+    eventSource.onmessage = ({data}) =>{
+        const message = document.createElement('li');
+        message.innerText = data;
+
+        document.body.appendChild(message);
+    }
+</script>
