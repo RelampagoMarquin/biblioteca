@@ -12,11 +12,11 @@ import { AuthModule } from './auth/auth.module';
 import { CacheRedis } from './CacheManage';
 @Module({
   imports: [ TypeOrmModule.forRoot({
-    type: 'mysql',
+    type: 'postgres',
     host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: 'ZICO509',
+    port: 5433,
+    username: 'postgres',
+    password: 'sirius',
     database: 'biblioteca',
     autoLoadEntities: true,
     synchronize: true,

@@ -10,10 +10,10 @@ export class Emprestimo {
     @Column()
     validade: number
 
-    @CreateDateColumn({ type: 'datetime' })
+    @CreateDateColumn({ type: 'timestamp' })
     emprestimo: Date
 
-    @Column({ type: 'datetime', nullable:true })
+    @Column({ type: 'timestamp', nullable:true })
     retorno: Date
 
     @ManyToOne((type) => Usuario, (usuario) => usuario.emprestimos)

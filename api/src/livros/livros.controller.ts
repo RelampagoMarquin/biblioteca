@@ -57,14 +57,9 @@ export class LivrosController {
         try {
           client = await this.redisClient.duplicate();
           console.log("Redis client created");
-          client.connect((err) => {
-            if (err) {
-              console.log(err);
-              return;
-            }})
-          client.then.connect().then(()  => {
+          client.connect().then(()  => {
             console.log("Redis client ready");
-            this.redisClient.subscribe('teste', (message, channel) => {
+            this.redisClient.subscribe(channelName, (message, channel) => {
               console.log(message)
               subscriber.next({data: message})
             })
