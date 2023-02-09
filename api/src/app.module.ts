@@ -9,14 +9,14 @@ import { EmprestimoModule } from './emprestimo/emprestimo.module';
 import { LivrosModule } from './livros/livros.module';
 import { AutorModule } from './autor/autor.module';
 import { AuthModule } from './auth/auth.module';
-
+import { CacheRedis } from './CacheManage';
 @Module({
   imports: [ TypeOrmModule.forRoot({
     type: 'mysql',
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: 'UseSuaSenha',
+    password: 'Amanda@2022',
     database: 'biblioteca',
     autoLoadEntities: true,
     synchronize: true,
@@ -28,16 +28,8 @@ import { AuthModule } from './auth/auth.module';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: 'CACHE_MANAGER',
-    useFactory: async () => {
-      const client = createClient({
-        url: 'redis://localhost:6379'
-      })
-      await client.connect();
-      return client;
-    }
-  }], 
+  providers: [AppService,CacheRedis], 
+  exports: [CacheRedis]
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
